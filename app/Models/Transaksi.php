@@ -9,7 +9,9 @@ class Transaksi extends Model
 {
     // use HasFactory;
 
-    protected $fillable = ['kode_produk', 'nama_user', 'harga', 'status', 'user_id'];
+    protected $fillable = [
+    'user_id', 'produk_id', 'nama_produk', 'gambar', 'harga', 'status',
+];
 
     // Transaksi.php
     public function produk()
@@ -17,11 +19,11 @@ class Transaksi extends Model
         return $this->belongsTo(Produk::class, 'kode_produk', 'kode_produk');
     }
 
-    
+
 
     public function transaksi()
     {
         return $this->belongsTo(Transaksi::class);
     }
-    
+
 }

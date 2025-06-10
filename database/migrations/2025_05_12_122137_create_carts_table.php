@@ -13,16 +13,29 @@ return new class extends Migration
     {
         Schema::create('carts', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('user_id'); // relasi ke tabel users
-            $table->string('kode_produk'); // relasi ke produk
-            $table->string('nama_user'); // sesuai model Cart
-            $table->string('harga');
-            $table->string('status');
-            $table->timestamps();
 
-            // Foreign key constraint (opsional tapi disarankan)
-            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
-            $table->foreign('kode_produk')->references('kode_produk')->on('produks')->onDelete('cascade');
+            // Relasi ke user
+            $table->unsignedBigInteger('user_id');
+            $table->foreign('user_id')
+                  ->references('id')->on('users')
+                  ->onDelete('cascade');
+
+            // Relasi ke produk
+            $table->unsignedBigInteger('produk_id');
+            $table->foreign('produk_id')
+                  ->references('id')->on('produks')
+                  ->onDelete('cascade');
+
+            // Snapshot data produk
+            $table->string('nama_produk');   // Nama produk pada saat dimasukkan ke cart
+            $table->string('gambar')->nullable(); // Path gambar cover
+
+            // Harga pada saat dimasukkan ke cart
+            $table->decimal('harga', 10, 2);
+
+            $table->string('status')->default('pending'); // Misal: pending, purchased, cancelled
+
+            $table->timestamps();
         });
     }
 

@@ -7,12 +7,8 @@ use Illuminate\Database\Eloquent\Model;
 class Cart extends Model
 {
     protected $fillable = [
-        'user_id',
-        'kode_produk',
-        'nama_user',
-        'harga',
-        'status'
-    ];
+    'user_id', 'produk_id', 'nama_produk', 'gambar', 'harga', 'status',
+];
 
     public function user()
     {
@@ -20,7 +16,7 @@ class Cart extends Model
     }
 
     public function produk()
-    {
-        return $this->belongsTo(Produk::class, 'kode_produk', 'kode_produk');
-    }
+{
+    return $this->belongsTo(Produk::class, 'produk_id');
+}
 }

@@ -139,13 +139,15 @@
             >
               Learn More
             </button>
-            <!-- Add to Wishlist → langsung ke Cart -->
-            <button
-              onclick="window.location.href='{{ route('transaksi.cart') }}'"
-              class="px-4 py-3 border border-white rounded-lg hover:bg-white hover:text-black transition"
-            >
-              Add to Wishlist
-            </button>
+            <!-- Add to Wishlist → langsung ke beli -->
+           <form action="{{ route('transaksi.beli') }}" method="POST">
+    @csrf
+    <input type="hidden" name="produk_id" value="{{ $produks[0]->id }}">
+    <button type="submit" class="px-4 py-3 border border-white rounded-lg hover:bg-white hover:text-black transition">
+        Add to Wishlist
+    </button>
+</form>
+
           </div>
         </div>
       </div>

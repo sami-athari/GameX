@@ -49,6 +49,7 @@
     transform: translateY(-2px);
   }
 </style>
+
 <section class="min-h-screen pt-20">
 <nav class="font-sans fixed top-0 left-0 right-0 z-50 glass">
   <div class="max-w-screen-2xl mx-auto px-6">
@@ -60,6 +61,7 @@
         <a href="{{ route('home') }}" class="text-gray-300 hover:text-red-600">Home</a>
         <a href="{{ route('transaksi.cart') }}" class="text-gray-300 hover:text-red-600">Cart</a>
         <a href="{{ route('transaksi.library') }}" class="text-gray-300 hover:text-red-600">Library</a>
+        <a href="{{ route('transaksi.transaksi') }}" class="text-gray-300 hover:text-red-600">Transaksi</a>
         <form action="{{ route('transaksi.search') }}" method="GET" class="relative ml-6">
           <input type="text" name="q" placeholder="Search games..."
                  class="py-1.5 px-4 rounded-full bg-gaming-dark text-sm focus:outline-none w-40 md:w-56 font-sans"/>
@@ -99,7 +101,7 @@
       <a href="{{ route('home') }}" class="block py-2 hover:text-red-600">Home</a>
       <a href="{{ route('transaksi.cart') }}" class="block py-2 hover:text-red-600">Cart</a>
       <a href="{{ route('transaksi.library') }}" class="block py-2 hover:text-red-600">Library</a>
-      <a href="{{ route('transaksi.library') }}" class="block py-2 hover:text-red-600">Transaksi</a>
+      <a href="{{ route('transaksi.transaksi') }}" class="block py-2 hover:text-red-600">Transaksi</a>
     </div>
   </div>
 </nav>
