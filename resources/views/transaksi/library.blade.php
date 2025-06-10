@@ -7,11 +7,30 @@
   <title>GameX - Library Kamu</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <style>
-    .gaming-dark   { background-color: #2d3748; }
+    .gaming-dark { background-color: #2d3748; }
     .gaming-darker { background-color: #1a202c; }
-    .gaming-card   { background-color: #4a5568; }
+    .gaming-card { background-color: #4a5568; }
     .gaming-hover:hover { background-color: #2a4365; }
   </style>
+<!-- Tailwind & FontAwesome -->
+   <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            'gaming-dark': '#2d3748',
+            'gaming-darker': '#1a202c',
+            'gaming-purple': '#9f7aea',
+            'gaming-blue': '#4299e1',
+            'gaming-card': '#4a5568',
+          },
+          fontFamily: { sans: ['Figtree','sans-serif'] },
+        }
+      }
+    }
+  </script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/>
 </head>
 <body class="gaming-darker text-white min-h-screen">
   @include('user.navbar')

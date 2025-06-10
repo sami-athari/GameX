@@ -30,6 +30,16 @@ class PembelianController extends Controller
     return view('transaksi.transaksi', compact('tikets', 'users', 'carts'));
 }
 
+public function search(Request $request)
+{
+    $keyword = $request->input('q');
+
+    $produks = Produk::where('nama', 'like', '%' . $keyword . '%')
+                    ->orWhere('deskripsi', 'like', '%' . $keyword . '%') // opsional kalau kamu punya deskripsi
+                    ->get();
+
+    return view('home', compact('produks', 'keyword'));
+}
 
 
     public function transaksiCart()

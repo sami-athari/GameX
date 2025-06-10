@@ -230,15 +230,46 @@
     </div>
 
     <script>
-      document.addEventListener('DOMContentLoaded', () => {
-        const toggleBtn = document.getElementById('toggle-view');
-        const section   = document.getElementById('games-section');
-        toggleBtn.addEventListener('click', () => {
-          section.classList.toggle('expanded');
-          toggleBtn.textContent = section.classList.contains('expanded') ? 'View Less' : 'View More';
-        });
-      });
-    </script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const carousel      = document.getElementById('carousel');
+    const leftBtn       = document.getElementById('carousel-left');
+    const rightBtn      = document.getElementById('carousel-right');
+    const toggleBtn     = document.getElementById('toggle-view');
+    const gamesSection  = document.getElementById('games-section');
+
+    // fungsi update tombol carousel
+    function updateButtons() {
+      leftBtn.classList.toggle('hidden', carousel.scrollLeft <= 0);
+      rightBtn.classList.toggle('hidden',
+        Math.ceil(carousel.scrollLeft + carousel.offsetWidth) >= carousel.scrollWidth);
+    }
+    updateButtons();
+    leftBtn.addEventListener('click', () => carousel.scrollBy({ left: -300, behavior: 'smooth' }));
+    rightBtn.addEventListener('click', () => carousel.scrollBy({ left: 300, behavior: 'smooth' }));
+    carousel.addEventListener('scroll', updateButtons);
+
+    document.getElementById('mobile-menu-button')
+      .addEventListener('click', () => document.getElementById('mobile-menu').classList.toggle('hidden'));
+
+    // ————————————————
+    // Kalau ada keyword (hasil search), langsung expand & scroll
+    @if(!empty($keyword))
+      // tambahkan class expanded
+      gamesSection.classList.add('expanded');
+      // sesuaikan teks tombol
+      toggleBtn.textContent = 'View Less';
+      // scroll ke atas section
+      gamesSection.scrollIntoView({ behavior: 'smooth' });
+    @endif
+
+    // tetep buat toggle kalau user klik lagi
+    toggleBtn.addEventListener('click', () => {
+      gamesSection.classList.toggle('expanded');
+      toggleBtn.textContent = gamesSection.classList.contains('expanded') ? 'View Less' : 'View More';
+    });
+  });
+</script>
+
   </section>
 
   <!-- Footer -->

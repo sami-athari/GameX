@@ -3,17 +3,21 @@
 use App\Http\Controllers\ProdukController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\HomeController;
+use App\Models\Produk;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\Auth\LogoutController;
 use App\Http\Controllers\KategoriController;
 use App\Http\Controllers\PembelianController;
 use Illuminate\Support\Facades\Auth;
+use App\Http\Controllers\BerandaControllers;
 
 // Landing page
 Route::get('/', function () {
-    return view('welcome');
-})->name('welcome');
+    $produks = Produk::latest()->get(); // Ambil produk terbaru
+
+    return view('welcome', ['produks' => $produks]);
+});
 
 // Auth routes
 Auth::routes();
@@ -62,13 +66,14 @@ Route::get('/cart', [PembelianController::class, 'transaksiCart'])->name('transa
 Route::get('/transaksi/{id}/clearcart', [PembelianController::class, 'clearcart'])->name('transaksi.clearcart');
 Route::get('/transaksi/cart', [PembelianController::class, 'transaksiCart'])->name('transaksi.cart');
 Route::get('/transaksi2', [PembelianController::class, 'transaksiIndex'])->name('transaksi.transaksi');
-Route::get('/transaksi/search', [PembelianController::class, 'index'])->name('transaksi.search');
 Route::delete('/transaksi/{id}', [PembelianController::class, 'hapus'])->name('transaksi.hapus');
 Route::post('/transaksi/{id}/batal', [PembelianController::class, 'batal'])->name('transaksi.batal');
 Route::delete('/transaksi/user/{id}', [PembelianController::class, 'clear'])->name('transaksi.clear');
 Route::post('/transaksi/konfirmasi/{id}', [PembelianController::class, 'konfirmasiStatus'])->name('transaksi.konfirmasi');
 Route::get('/transaksi/cetak/{id}', [PembelianController::class, 'generatePdf'])->name('transaksi.cetak');
 Route::get('/transaksi/transaksiManager', [PembelianController::class, 'transaksiIndexManager'])->name('transaksi.transaksiManager');
+Route::get('/transaksi/search', [App\Http\Controllers\PembelianController::class, 'search'])->name('transaksi.search');
+
 
 // Library
 Route::middleware(['auth', 'user-access:user'])->group(function () {
@@ -78,3 +83,15 @@ Route::middleware(['auth', 'user-access:user'])->group(function () {
     Route::get('/transaksi/library', [PembelianController::class, 'library'])->name('user.transaksi.library');
 });
 Route::delete('/library/{id}/delete', [PembelianController::class, 'hapusDariLibrary'])->name('user.library.delete');
+
+Route::middleware('guest')->group(function () {
+    Route::view('login', 'auth.login')->name('login');
+    Route::view('register', 'auth.register')->name('register');
+});
+
+Route::middleware(['auth'])->group(function () {
+    Route::get('/produk/{id}', [ProdukController::class, 'show'])->name('produk.show');
+    Route::get('/deskripsi/{id}', [ProdukController::class, 'deskripsi'])->name('deskripsi'); // <- Tambahan
+    Route::post('/cart/add/{id}', [PembelianController::class, 'add'])->name('cart.add');
+    Route::post('/beli', [PembelianController::class, 'beli'])->name('transaksi.beli'); // <- Pastikan ini ada juga
+});
