@@ -34,8 +34,7 @@ class PembelianController extends Controller
 
     public function transaksiCart()
     {
-        $user = Auth::user();
-        $carts = Cart::where('user_id', $user->id)->get();
+        $carts = Cart::where('user_id', Auth::id())->get();
         return view('transaksi.cart', compact('carts'));
     }
 
@@ -45,30 +44,25 @@ class PembelianController extends Controller
             'produk_id' => 'required|exists:produks,id',
         ]);
 
-        $user   = Auth::user();
         $produk = Produk::findOrFail($request->produk_id);
 
-        // Cek stok
         if ($produk->stok < 1) {
             return back()->with('error', 'Stok produk habis!');
         }
 
-        // Kurangi stok
         $produk->decrement('stok');
 
-        // Simpan snapshot data produk ke cart
         Cart::create([
-            'user_id'      => $user->id,
-            'produk_id'    => $produk->id,
-            'nama_produk'  => $produk->nama,
-            'gambar'       => $produk->gambar,       // path relatif ke storage
-            'harga'        => $produk->harga,
-            'status'       => 'pending',             // atau logic lain
+            'user_id'     => Auth::id(),
+            'produk_id'   => $produk->id,
+            'nama_produk' => $produk->nama,
+            'gambar'      => $produk->gambar,
+            'harga'       => $produk->harga,
+            'status'      => 'Pending',
         ]);
 
-        return redirect()
-            ->route('transaksi.cart')
-            ->with('success', 'Berhasil ditambahkan ke keranjang!');
+        return redirect()->route('transaksi.cart')
+                         ->with('success', 'Produk berhasil ditambahkan ke cart!');
     }
 
     public function clearcart($id)
@@ -100,24 +94,25 @@ class PembelianController extends Controller
         'cart_id' => 'required|exists:carts,id',
     ]);
 
-    $user = Auth::user();
-    $cart = Cart::findOrFail($request->cart_id);
+    $cart = Cart::where('id', $request->cart_id)
+                ->where('user_id', Auth::id())
+                ->firstOrFail();
 
-    $transaksi = new Transaksi();
-    $transaksi->user_id     = $user->id;
-    $transaksi->kode_produk = $cart->produk_id; // Asumsi kamu pakai produk_id sebagai kode, atau ganti sesuai field
-    $transaksi->nama_user   = $user->name;
-    $transaksi->nama_produk = $cart->nama_produk; // Tambahkan ini
-    $transaksi->gambar      = $cart->gambar;      // Tambahkan ini
-    $transaksi->harga       = $cart->harga;
-    $transaksi->status      = 'Pending';
-    $transaksi->save();
+    Transaksi::create([
+        'user_id'     => Auth::id(),
+        'produk_id'   => $cart->produk_id,
+        'nama_produk' => $cart->nama_produk,
+        'gambar'      => $cart->gambar,
+        'harga'       => $cart->harga,
+        'status'      => 'pending', // lowercase biar konsisten
+    ]);
 
     $cart->delete();
 
     return redirect()->route('transaksi.transaksi')
-        ->with('success', 'Produk berhasil dibayar dan masuk ke transaksi!');
+                     ->with('success', 'Produk berhasil dibayar!');
 }
+
 
 
     public function hapus($id)

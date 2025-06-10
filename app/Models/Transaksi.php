@@ -10,13 +10,13 @@ class Transaksi extends Model
     // use HasFactory;
 
     protected $fillable = [
-    'user_id', 'produk_id', 'nama_produk', 'gambar', 'harga', 'status',
+  'user_id', 'produk_id','nama_produk', 'gambar', 'harga', 'status'
 ];
 
     // Transaksi.php
     public function produk()
     {
-        return $this->belongsTo(Produk::class, 'kode_produk', 'kode_produk');
+        return $this->belongsTo(Produk::class, 'produk_id');
     }
 
 

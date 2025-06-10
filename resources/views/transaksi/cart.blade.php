@@ -117,12 +117,6 @@
             </a>
           @endif
 
-          <div class="mt-2 space-x-1">
-            <a href="{{ route('transaksi.transaksi') }}"
-               class="px-2 py-1 bg-yellow-600 rounded hover:bg-yellow-500 transition inline-block">
-              Bayar Game
-            </a>
-          </div>
         </td>
       </tr>
     @endforeach
