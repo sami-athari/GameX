@@ -83,10 +83,9 @@
                   {{-- Status --}}
                   <td class="px-4 py-3">
                     @php $st = strtolower($transaksi->status); @endphp
-                    <span class="font-semibold"
-                          style="color: {{ $st === 'selesai' ? '#48BB78' : '#F56565' }};">
-                      {{ ucfirst($st) }}
-                    </span>
+                    <span class="font-semibold {{ $st === 'selesai' ? 'text-green-500' : 'text-red-500' }}">
+                                          {{ ucfirst($st) }}
+                                        </span>
                   </td>
 
                   {{-- Tanggal --}}

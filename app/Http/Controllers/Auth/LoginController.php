@@ -26,7 +26,7 @@ class LoginController extends Controller
         ]);
         if (Auth::attempt(array('email' => $input['email'], 'password' => $input['password']))) {
             if (Auth::user()->type == 'admin') {
-                return redirect()->route('admin.home');
+                return redirect()->route('admin.beranda');
             } else {
                 return redirect()->route('home');
             }

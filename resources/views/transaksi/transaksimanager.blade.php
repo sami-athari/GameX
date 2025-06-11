@@ -3,10 +3,10 @@
 @section('title', 'Transaksi Manager')
 
 @section('content')
+<div class="pt-20">
 <div class="bg-gaming-card p-6 rounded-lg shadow-lg">
     <div class="flex justify-between items-center mb-6">
         <h2 class="text-2xl font-bold text-gaming-red-600">Data Transaksi</h2>
-        <a href="{{ route('adminHome') }}" class="text-gray-300 hover:text-gaming-red-600">Beranda</a>
     </div>
     @if(session('success'))
         <div class="bg-green-500 text-white p-4 rounded-lg mb-4">{{ session('success') }}</div>

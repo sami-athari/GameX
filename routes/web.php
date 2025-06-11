@@ -41,6 +41,7 @@ Route::middleware(['auth', 'user-access:user'])->group(function () {
 // Admin routes
 Route::middleware(['auth', 'user-access:admin'])->group(function () {
     Route::get('/admin/home', [HomeController::class, 'adminHome'])->name('admin.home');
+    Route::get('/admin/beranda', [HomeController::class, 'beranda'])->name('admin.beranda');
     Route::get('/admin/play-game/{id}', [ProdukController::class, 'mainkan'])->name('admin.play');
 });
 

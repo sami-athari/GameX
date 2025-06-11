@@ -232,9 +232,8 @@
                   {{ $produk->nama }} {{ $produk->discount_label ? 'Enhanced' : '' }}
                 </h2>
                 <p class="text-lg text-gray-300">
-                  SAVE DURING MEGA SALE<br>
-                  Experience entertainment blockbusters {{ $produk->nama }} now upgraded for a new generation.
-                </p>
+    {{ $produk->deskripsi }}
+</p>
                 <div class="flex items-center space-x-4">
                   @if($produk->orig_price)
                     <span class="text-gray-400 line-through">
@@ -257,13 +256,13 @@
                     onclick="window.location.href='{{ route('deskripsi', $produk->id) }}'"
                     class="px-6 py-3 bg-white text-black rounded-lg hover-lift"
                   >
-                    Save Now
+                    View More
                   </button>
                   <form action="{{ route('transaksi.beli') }}" method="POST">
                     @csrf
                     <input type="hidden" name="produk_id" value="{{ $produk->id }}">
                     <button type="submit" class="px-4 py-3 border border-white rounded-lg hover:bg-white hover:text-black transition">
-                      Add to Wishlist
+                      Add to Cart
                     </button>
                   </form>
                 </div>
@@ -308,7 +307,7 @@
   </section>
 
   <!-- Games Carousel -->
-  <section id="games-section" class="py-12">
+<section id="games-section" class="py-12">
     <div class="max-w-screen-2xl mx-auto px-6">
       <div class="flex justify-between items-center mb-6">
         <h2 class="text-3xl font-bold">Popular Games</h2>
@@ -324,7 +323,7 @@
           <div class="carousel space-x-6 flex-shrink-0 flex" id="carousel">
             @foreach($produks as $produk)
               <div class="relative min-w-[250px] bg-gaming-card rounded-xl overflow-hidden card-hover-overlay group flex-shrink-0 cursor-pointer"
-                   onclick="showModal('{{ Storage::url($produk->gambar) }}')">
+                   onclick="window.location.href='{{ route('deskripsi', $produk->id) }}'">
                 @if($produk->stok > 0)
                   <form action="{{ route('transaksi.beli') }}" method="POST"
                         onclick="event.stopPropagation();" class="absolute top-2 right-2 z-10">
@@ -358,6 +357,7 @@
         </div>
       @endif
     </div>
+</section>
 
     <!-- Modal untuk gambar produk -->
     <div id="modal" class="modal">
@@ -506,37 +506,84 @@
   </section>
 
   <!-- Footer -->
-  <footer class="bg-gaming-dark text-gray-400">
-    <div class="max-w-screen-2xl mx-auto px-6 py-12">
-      <div class="flex flex-col md:flex-row justify-between items-center mb-8 border-b border-gray-700 pb-8">
-        <h3 class="text-white text-xl font-bold tracking-widest">STORE</h3>
-        <div class="flex space-x-4 mt-4 md:mt-0">
-          <a href="#" class="hover:text-white"><i class="fab fa-facebook-f"></i></a>
-          <a href="#" class="hover:text-white"><i class="fab fa-twitter"></i></a>
-          <a href="#" class="hover:text-white"><i class="fab fa-youtube"></i></a>
-        </div>
-      </div>
-      <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-8 mb-12">
-        <!-- Kolom footer seperti semula -->
-      </div>
-      <div class="border-t border-gray-700 pt-8 flex flex-col lg:flex-row justify-between items-center text-sm">
-        <p class="mb-4 lg:mb-0 text-justify lg:text-left">
-          © 2025, Epic Games, Inc. All rights reserved. …
-        </p>
-        <ul class="flex flex-wrap space-x-6">
-          <li><a href="#" class="hover:text-white">Terms of service</a></li>
-          <li><a href="#" class="hover:text-white">Privacy policy</a></li>
-          <li><a href="#" class="hover:text-white">Safety & security</a></li>
-          <li><a href="#" class="hover:text-white">Store refund policy</a></li>
-          <li><a href="#" class="hover:text-white">Publisher Index</a></li>
-        </ul>
-      </div>
-      <div class="fixed bottom-6 right-6">
-        <a href="#top" class="bg-gray-700 hover:bg-gray-600 text-white px-4 py-2 rounded-full flex items-center space-x-2 shadow-lg">
-          <span>Back to top</span><i class="fas fa-arrow-up"></i>
-        </a>
+  <footer class="bg-gradient-to-b from-gaming-dark to-gaming-darker text-gray-400">
+  <div class="max-w-screen-2xl mx-auto px-6 py-12">
+    <div class="flex flex-col md:flex-row justify-between items-center mb-8 border-b border-gray-700 pb-8">
+      <h3 class="text-white text-xl font-bold tracking-widest">GAMEX STORE</h3>
+      <div class="flex space-x-4 mt-4 md:mt-0">
+        <a href="#" class="hover:text-gaming-purple transition"><i class="fab fa-facebook-f"></i></a>
+        <a href="#" class="hover:text-gaming-purple transition"><i class="fab fa-twitter"></i></a>
+        <a href="#" class="hover:text-gaming-purple transition"><i class="fab fa-youtube"></i></a>
+        <a href="#" class="hover:text-gaming-purple transition"><i class="fab fa-discord"></i></a>
       </div>
     </div>
-  </footer>
+    <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-8 mb-12">
+      <!-- Kolom 1: Kategori -->
+      <div>
+        <h4 class="text-white font-semibold mb-4">Categories</h4>
+        <ul class="space-y-2">
+          <li><a href="#" class="hover:text-gaming-blue transition">Action</a></li>
+          <li><a href="#" class="hover:text-gaming-blue transition">RPG</a></li>
+          <li><a href="#" class="hover:text-gaming-blue transition">Strategy</a></li>
+          <li><a href="#" class="hover:text-gaming-blue transition">Multiplayer</a></li>
+        </ul>
+      </div>
+      <!-- Kolom 2: Support -->
+      <div>
+        <h4 class="text-white font-semibold mb-4">Support</h4>
+        <ul class="space-y-2">
+          <li><a href="#" class="hover:text-gaming-blue transition">Help Center</a></li>
+          <li><a href="#" class="hover:text-gaming-blue transition">Contact Us</a></li>
+          <li><a href="#" class="hover:text-gaming-blue transition">FAQ</a></li>
+        </ul>
+      </div>
+      <!-- Kolom 3: About -->
+      <div>
+        <h4 class="text-white font-semibold mb-4">About Us</h4>
+        <ul class="space-y-2">
+          <li><a href="#" class="hover:text-gaming-blue transition">Our Story</a></li>
+          <li><a href="#" class="hover:text-gaming-blue transition">Careers</a></li>
+          <li><a href="#" class="hover:text-gaming-blue transition">Press</a></li>
+        </ul>
+      </div>
+      <!-- Kolom 4: Legal -->
+      <div>
+        <h4 class="text-white font-semibold mb-4">Legal</h4>
+        <ul class="space-y-2">
+          <li><a href="#" class="hover:text-gaming-blue transition">Terms of Service</a></li>
+          <li><a href="#" class="hover:text-gaming-blue transition">Privacy Policy</a></li>
+          <li><a href="#" class="hover:text-gaming-blue transition">Refund Policy</a></li>
+        </ul>
+      </div>
+      <!-- Kolom 5: Contact -->
+      <div>
+        <h4 class="text-white font-semibold mb-4">Contact</h4>
+        <ul class="space-y-2">
+          <li><a href="mailto:support@gamex.com" class="hover:text-gaming-blue transition">support@gamex.com</a></li>
+          <li><a href="tel:+628123456789" class="hover:text-gaming-blue transition">+62 812-3456-789</a></li>
+          <li><p>Jakarta, Indonesia</p></li>
+        </ul>
+      </div>
+    </div>
+    <div class="border-t border-gray-700 pt-8 flex flex-col lg:flex-row justify-between items-center text-sm">
+      <p class="mb-4 lg:mb-0 text-gray-500 text-center lg:text-left">
+        © {{ date('Y') }}, GameX, Inc. All rights reserved. Powered by passion for gaming.
+      </p>
+      <ul class="flex flex-wrap space-x-6">
+        <li><a href="#" class="hover:text-gaming-purple transition">Terms of Service</a></li>
+        <li><a href="#" class="hover:text-gaming-purple transition">Privacy Policy</a></li>
+        <li><a href="#" class="hover:text-gaming-purple transition">Safety & Security</a></li>
+        <li><a href="#" class="hover:text-gaming-purple transition">Store Refund Policy</a></li>
+        <li><a href="#" class="hover:text-gaming-purple transition">Publisher Index</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="fixed bottom-6 right-6">
+    <a href="#top" class="bg-gaming-card hover:bg-gaming-blue text-white px-4 py-2 rounded-full flex items-center space-x-2 shadow-lg hover-lift transition">
+      <span>Back to Top</span><i class="fas fa-arrow-up"></i>
+    </a>
+  </div>
+</footer>
+
 </body>
 </html>

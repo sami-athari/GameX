@@ -64,7 +64,7 @@
                     <button id="sidebarToggle" class="text-gray-300 hover:text-gaming-red-600">
                         <i class="fas fa-bars text-xl"></i>
                     </button>
-                    <a href="{{ route('admin.home') }}" class="text-2xl font-extrabold">
+                    <a href="{{ route('admin.beranda') }}" class="text-2xl font-extrabold">
                         Game<span class="text-gaming-red-600">X</span> Admin
                     </a>
                 </div>
@@ -95,7 +95,7 @@
         <div class="flex flex-col h-full p-4 pt-20">
             <ul class="space-y-4 flex-1">
                 <li class="group">
-                    <a href="{{ route('admin.home') }}" class="flex items-center space-x-3 text-gray-300 hover:text-gaming-red-600 hover:bg-gaming-hover rounded-lg px-3 py-2 transition-all duration-300">
+                    <a href="{{ route('admin.beranda') }}" class="flex items-center space-x-3 text-gray-300 hover:text-gaming-red-600 hover:bg-gaming-hover rounded-lg px-3 py-2 transition-all duration-300">
                         <i class="fas fa-home text-xl"></i>
                         <span>Dashboard</span>
                     </a>
@@ -129,22 +129,16 @@
                     </a>
                 </li>
                 <li class="group">
-                    <a href="#" class="flex items-center space-x-3 text-gray-300 hover:text-gaming-red-600 hover:bg-gaming-hover rounded-lg px-3 py-2 transition-all duration-300">
+                    <a href="{{ route('home') }}" class="flex items-center space-x-3 text-gray-300 hover:text-gaming-red-600 hover:bg-gaming-hover rounded-lg px-3 py-2 transition-all duration-300">
                         <i class="fas fa-users text-xl"></i>
-                        <span>Pengguna</span>
+                        <span>Atur User</span>
                     </a>
                 </li>
                 <li class="group">
-                    <a href="#" class="flex items-center space-x-3 text-gray-300 hover:text-gaming-red-600 hover:bg-gaming-hover rounded-lg px-3 py-2 transition-all duration-300">
-                        <i class="fas fa-chart-bar text-xl"></i>
-                        <span>Laporan</span>
-                    </a>
-                </li>
-                <li class="group">
-                    <a href="#" class="flex items-center space-x-3 text-gray-300 hover:text-gaming-red-600 hover:bg-gaming-hover rounded-lg px-3 py-2 transition-all duration-300">
-                        <i class="fas fa-cog text-xl"></i>
-                        <span>Pengaturan</span>
-                    </a>
+                    <a href="{{ url('/') }}" class="flex items-center space-x-3 text-gray-300 hover:text-gaming-red-600 hover:bg-gaming-hover rounded-lg px-3 py-2 transition-all duration-300">
+                                <i class="fas fa-external-link-alt"></i>
+                                <span>Lihat Website</span>
+                            </a>
                 </li>
             </ul>
         </div>

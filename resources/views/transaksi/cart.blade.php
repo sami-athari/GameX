@@ -12,8 +12,6 @@
     .gaming-card { background-color: #4a5568; }
     .gaming-hover:hover { background-color: #2a4365; }
   </style>
-<!-- Tailwind & FontAwesome -->
-   <script src="https://cdn.tailwindcss.com"></script>
   <script>
     tailwind.config = {
       theme: {
@@ -25,108 +23,98 @@
             'gaming-blue': '#4299e1',
             'gaming-card': '#4a5568',
           },
-          fontFamily: { sans: ['Figtree','sans-serif'] },
+          fontFamily: { sans: ['Figtree', 'sans-serif'] },
         }
       }
     }
   </script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/>
 </head>
-<body class="bg-gaming-darker text-white font-sans">
-</head>
-<body class="gaming-darker text-white min-h-screen py-12">
-  <div class="max-w-5xl mx-auto px-4">
-<!-- Navigation -->
-     @include('user.navbar')
-    <!-- Header -->
-    <div class="flex justify-between items-center mb-6">
-      <h1 class="text-4xl font-bold">Data Keranjang</h1>
-      <div class="space-x-4">
+<body class="bg-gaming-darker text-white font-sans min-h-screen">
+  @include('user.navbar')
 
+  <main class="max-w-5xl mx-auto px-4 py-8">
+    <div class="bg-gaming-card rounded-lg shadow-lg overflow-hidden">
+      <div class="bg-gaming-dark px-6 py-4 flex justify-between items-center">
+        <h2 class="text-2xl font-bold">Data Keranjang</h2>
+      </div>
+      <div class="p-6">
+        @if(session('success'))
+          <div class="mb-6 p-4 bg-green-600 rounded shadow">
+            {{ session('success') }}
+          </div>
+        @endif
+
+        <div class="overflow-x-auto">
+          <table class="min-w-full table-auto border-collapse">
+            <thead>
+              <tr class="bg-gaming-dark">
+                <th class="px-4 py-3 text-left">Gambar Produk</th>
+                <th class="px-4 py-3 text-left">Nama Produk</th>
+                <th class="px-4 py-3 text-left">Harga</th>
+                <th class="px-4 py-3 text-left">Status</th>
+                <th class="px-4 py-3 text-left">Tanggal</th>
+                <th class="px-4 py-3 text-center">Aksi</th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-gray-700">
+              @forelse($carts as $cart)
+                <tr class="hover:bg-gaming-hover transition">
+                  <td class="px-4 py-3">
+                    @if($cart->gambar)
+                      <img src="{{ asset('storage/' . $cart->gambar) }}"
+                           alt="{{ $cart->nama_produk }}"
+                           class="w-16 h-16 object-cover rounded" onerror="this.src='https://via.placeholder.com/16'; this.className='w-16 h-16 object-cover rounded';"/>
+                    @else
+                      <span class="text-gray-400">No Image</span>
+                    @endif
+                  </td>
+                  <td class="px-4 py-3 font-semibold">{{ $cart->nama_produk }}</td>
+                  <td class="px-4 py-3">Rp {{ number_format($cart->harga, 0, ',', '.') }}</td>
+                  <td class="px-4 py-3">
+                    @php $st = strtolower($cart->status); @endphp
+                    <span class="font-semibold" style="color: {{ $st === 'selesai' ? '#48BB78' : '#F56565' }};">
+                      {{ ucfirst($st) }}
+                    </span>
+                  </td>
+                  <td class="px-4 py-3">{{ $cart->created_at->format('d M Y, H:i') }}</td>
+                  <td class="px-4 py-3 text-center space-x-2">
+                    @if($st === 'pending')
+                      <form action="{{ route('transaksi.bayar') }}" method="POST" class="inline">
+                        @csrf
+                        <input type="hidden" name="cart_id" value="{{ $cart->id }}">
+                        <button type="submit" class="px-3 py-1 bg-green-600 rounded hover:bg-green-500 transition">
+                          Bayar
+                        </button>
+                      </form>
+                      <form action="{{ route('transaksi.clearcart', $cart->id) }}" method="POST" class="inline">
+                        @csrf
+                        <button type="submit" class="px-3 py-1 bg-red-600 rounded hover:bg-red-500 transition">
+                          Batal
+                        </button>
+                      </form>
+                    @elseif($st === 'selesai')
+                      <a href="{{ route('transaksi.cetak', $cart->id) }}" target="_blank"
+                         class="px-3 py-1 bg-blue-600 rounded hover:bg-blue-500 transition">
+                        Cetak PDF
+                      </a>
+                    @endif
+                  </td>
+                </tr>
+              @empty
+                <tr>
+                  <td colspan="6" class="px-4 py-6 text-center text-gray-400">
+                    Keranjang kosong.
+                  </td>
+                </tr>
+              @endforelse
+            </tbody>
+          </table>
+        </div>
       </div>
     </div>
+  </main>
 
-    <!-- Session success -->
-    @if(session('success'))
-      <div class="mb-4 p-4 bg-green-600 rounded-lg shadow">
-        {{ session('success') }}
-      </div>
-    @endif
-
-    <!-- Table -->
-    <div class="overflow-x-auto">
-     <!-- resources/views/transaksi/cart.blade.php -->
-<table class="min-w-full table-auto border-collapse shadow-lg rounded">
-  <thead>
-    <tr class="bg-gaming-dark text-white">
-      <th class="px-4 py-3 text-left">Gambar Produk</th>
-      <th class="px-4 py-3 text-left">Nama Produk</th>
-      <th class="px-4 py-3 text-left">Harga</th>
-      <th class="px-4 py-3 text-left">Status</th>
-      <th class="px-4 py-3 text-left">Tanggal</th>
-      <th class="px-4 py-3 text-center">Aksi</th>
-    </tr>
-  </thead>
-  <tbody class="divide-y divide-gray-700">
-    @foreach($carts as $cart)
-      <tr class="bg-gaming-card hover:gaming-hover transition duration-200">
-        <!-- Ganti kode_produk jadi gambar -->
-        <td class="px-4 py-3">
-          <img src="{{ asset('storage/'.$cart->gambar) }}"
-               alt="{{ $cart->nama_produk }}"
-               class="w-16 h-16 object-cover rounded"/>
-        </td>
-
-        <!-- Ganti nama_user jadi nama_produk -->
-        <td class="px-4 py-3 font-semibold">
-          {{ $cart->nama_produk }}
-        </td>
-
-        <td class="px-4 py-3">Rp {{ number_format($cart->harga, 0, ',', '.') }}</td>
-
-        <td class="px-4 py-3">
-          <span class="font-semibold" style="color:
-            {{ $cart->status=='Selesai' ? '#48BB78'
-               : ($cart->status=='Pending' ? '#F56565' : '#E2E8F0') }};
-          ">
-            {{ $cart->status }}
-          </span>
-        </td>
-
-        <td class="px-4 py-3">{{ $cart->created_at->format('d M Y, H:i') }}</td>
-
-        <td class="px-4 py-3 text-center space-y-1">
-          @if($cart->status == 'Pending')
-            <form action="{{ route('transaksi.bayar') }}" method="POST" class="inline-block mb-1">
-              @csrf
-              <input type="hidden" name="cart_id" value="{{ $cart->id }}">
-              <button type="submit" class="px-3 py-1 bg-green-600 rounded hover:bg-green-500 transition">
-                Bayar
-              </button>
-            </form>
-            <form action="{{ route('transaksi.clearcart', $cart->id) }}" method="POST" class="inline-block mb-1">
-              @csrf
-              <button type="submit" class="px-3 py-1 bg-red-600 rounded hover:bg-red-500 transition">
-                Batal
-              </button>
-            </form>
-          @elseif($cart->status == 'Selesai')
-            <a href="{{ route('transaksi.cetak', $cart->id) }}" target="_blank"
-               class="px-3 py-1 bg-blue-600 rounded hover:bg-blue-500 transition block mb-1">
-              Cetak PDF
-            </a>
-          @endif
-
-        </td>
-      </tr>
-    @endforeach
-  </tbody>
-</table>
-
-    </div>
-  </div>
-  <section class="min-h-screen pt-20">
   @include('user.footer')
 </body>
 </html>
-

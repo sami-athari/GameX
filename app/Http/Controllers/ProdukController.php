@@ -6,6 +6,8 @@ use App\Models\Produk;
 use App\Models\Kategori;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\File;
+
 
 class ProdukController extends Controller
 {
@@ -15,6 +17,8 @@ class ProdukController extends Controller
         $produks = Produk::all();  // Ambil semua produk
         return view('adminHome', ['produks' => $produks]);
     }
+
+    
 
     // Menampilkan form tambah produk (admin)
     public function create()
@@ -112,26 +116,31 @@ public function deskripsi($id)
 
     // Hapus produk (admin)
     public function destroy($id)
-    {
-        $produk = Produk::find($id);
+{
+    $produk = Produk::findOrFail($id);
 
-        // Hapus file terkait dari storage
-        if ($produk->gambar) {
-            Storage::disk('public')->delete($produk->gambar);
-        }
-        if ($produk->zip_file) {
-            Storage::disk('public')->delete($produk->zip_file);
-        }
-        $slug = $produk->kode_produk;
-        $gameFolder = public_path('games/' . $slug);
-        if (file_exists($gameFolder)) {
-            rmdir($gameFolder); // Hapus folder game jika ada
-        }
-
-        $produk->delete();
-
-        return redirect()->route('adminHome')->with('success', 'Produk berhasil dihapus');
+    // Hapus gambar jika ada
+    if ($produk->gambar) {
+        Storage::disk('public')->delete($produk->gambar);
     }
+
+    // Hapus file zip jika ada
+    if ($produk->zip_file) {
+        Storage::disk('public')->delete($produk->zip_file);
+    }
+
+    // Hapus folder game (beserta isinya)
+    $slug = $produk->kode_produk;
+    $gameFolder = public_path('games/' . $slug);
+    if (File::exists($gameFolder)) {
+        File::deleteDirectory($gameFolder); // ✅ aman untuk folder berisi file
+    }
+
+    // Hapus data dari database
+    $produk->delete();
+
+    return redirect()->route('adminHome')->with('success', 'Produk berhasil dihapus');
+}
 
     // Metode untuk menangani upload file
     private function handleFileUpload($request, $produk = null)

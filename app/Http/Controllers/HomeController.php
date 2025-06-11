@@ -28,6 +28,12 @@ class HomeController extends Controller
         return view('adminHome', compact('produks')); // Kirim ke view adminHome
     }
 
+    public function beranda(): View
+    {
+        $produks = Produk::all(); // Mengambil semua data produk
+        return view('layouts.admin', compact('produks')); // Kirim ke view adminHome
+    }
+
     // Halaman admin untuk menambah produk
     public function create(): View
     {
@@ -89,7 +95,7 @@ class HomeController extends Controller
         $produk = Produk::findOrFail($id);
 
         // Generate kode_produk otomatis
-        
+
 
         // Menyimpan gambar baru jika ada
         if ($request->hasFile('gambar')) {
