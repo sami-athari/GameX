@@ -15,8 +15,9 @@
             {{ session('error') }}
         </div>
     @endif
-
+<div class="pt-20   ">
     <div class="bg-gaming-card rounded-lg overflow-hidden shadow-lg">
+
         <table class="min-w-full divide-y divide-gray-700">
             <thead>
                 <tr class="bg-gaming-dark text-left text-gray-300 uppercase text-xs">
@@ -44,20 +45,26 @@
                         <td class="px-4 py-2">{{ $produk->stok }}</td>
                         <td class="px-4 py-2">{{ $produk->kategori->nama ?? 'N/A' }}</td>
                         <td class="px-4 py-2">{{ $produk->platform }}</td>
+
+                        {{-- Kolom Gambar --}}
                         <td class="px-4 py-2">
                             @if($produk->gambar)
-                                <img src="{{ asset($produk->gambar) }}" alt="{{ $produk->nama }}" class="w-16 h-16 object-cover rounded">
+                                <img src="{{ asset('storage/' . $produk->gambar) }}" alt="{{ $produk->nama }}" class="w-16 h-16 object-cover rounded">
                             @else
                                 <span class="text-gray-400">No Image</span>
                             @endif
                         </td>
+
+                        {{-- Kolom File ZIP --}}
                         <td class="px-4 py-2">
                             @if($produk->zip_file)
                                 <a href="{{ asset($produk->zip_file) }}" class="text-gaming-red-600 hover:text-gaming-red-500">Download</a>
                             @else
-                                <span class="text-gray-400">No File</span>
+                                <span class="tex    frst-gray-400">No File</span>
                             @endif
                         </td>
+
+                        {{-- Kolom Aksi --}}
                         <td class="px-4 py-2 text-center space-x-2">
                             <a href="{{ route('admin.play', $produk->id) }}"
                                class="bg-green-600 hover:bg-green-700 text-white px-3 py-1 rounded text-sm hover-lift">
@@ -80,7 +87,7 @@
                     <tr>
                         <td colspan="11" class="px-4 py-2 text-center text-gray-400">No products found.</td>
                     </tr>
-                @endempty
+                @endforelse
             </tbody>
         </table>
     </div>

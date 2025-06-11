@@ -3,6 +3,7 @@
 @section('title', 'Tambah Game')
 
 @section('content')
+<div class="pt-16">
 <div class="bg-gaming-card p-6 rounded-lg shadow-lg">
     <h2 class="text-2xl font-bold mb-6 text-gaming-red-600">Tambah Game</h2>
     <form action="{{ route('produk.store') }}" method="POST" enctype="multipart/form-data" class="space-y-4">

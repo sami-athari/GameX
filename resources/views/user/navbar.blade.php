@@ -1,6 +1,3 @@
-
-<!-- resources/views/layouts/navbar.blade.php -->
-
 <!-- Tailwind CSS -->
 <script src="https://cdn.tailwindcss.com"></script>
 <script>
@@ -11,7 +8,7 @@
           'gaming-dark': '#2d3748',
           'gaming-darker': '#1a202c',
           'gaming-red-600': '#dc2626',
-          'gaming-red-500': '#ef4444', // Added for Register button hover
+          'gaming-red-500': '#ef4444',
           'gaming-blue': '#4299e1',
           'gaming-card': '#4a5568',
           'gaming-hover': '#2c3746',
@@ -45,22 +42,22 @@
   }
 
   .btn-gaming-red {
-    background-color: #dc2626; /* gaming-red-600 */
+    background-color: #dc2626;
     color: white;
     transition: background-color 0.3s ease, transform 0.3s ease;
   }
   .btn-gaming-red:hover {
-    background-color: #ef4444; /* gaming-red-500 */
+    background-color: #ef4444;
     transform: translateY(-2px);
   }
 </style>
-
-<nav class="font-sans fixed top-0 left-0 right-0 z-50 glass">
+<div class="pt-16">
+<nav class="font-sans fixed top-0 left-0 right-0 z-50 glass py-4">
   <div class="max-w-screen-2xl mx-auto px-6">
-    <div class="flex justify-between items-center py-4">
+    <div class="flex justify-between items-center">
       <a href="{{ Auth::check() ? route('home') : url('/') }}" class="text-2xl font-extrabold">
-    Game<span class="text-gaming-red-600">X</span>
-</a>
+        Game<span class="text-gaming-red-600">X</span>
+      </a>
       <div class="hidden md:flex items-center space-x-8">
         <a href="{{ Auth::check() ? route('home') : url('/') }}" class="text-gray-300 hover:text-gaming-red-600">Home</a>
         <a href="{{ route('transaksi.cart') }}" class="text-gray-300 hover:text-gaming-red-600">Cart</a>

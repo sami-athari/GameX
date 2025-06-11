@@ -3,6 +3,7 @@
 @section('title', 'Daftar Kategori')
 
 @section('content')
+<div class="pt-16">
 <div class="bg-gaming-card p-6 rounded-lg shadow-lg">
     <div class="flex justify-between items-center mb-6">
         <h2 class="text-2xl font-bold text-gaming-red-600">Daftar Kategori</h2>

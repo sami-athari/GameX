@@ -1,264 +1,59 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{{ config('app.name', 'ShopGaming') }} - Admin @yield('title')</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
-    @yield('styles')
-</head>
-<body class="bg-gray-900 text-white">
-    <!-- Top Navigation -->
-    <nav class="bg-gray-800 border-b border-gray-700 px-4 py-3">
-        <div class="flex justify-between items-center">
-            <div class="flex items-center space-x-4">
-                <button id="sidebarToggle" class="text-gray-400 hover:text-white lg:hidden">
-                    <i class="fas fa-bars text-xl"></i>
-                </button>
-                <div class="flex items-center space-x-2">
-                    <i class="fas fa-gamepad text-purple-500 text-2xl"></i>
-                    <span class="font-bold text-xl text-white">ShopGaming Admin</span>
-                </div>
-            </div>
+@extends('admin.layout')
 
-            <div class="flex items-center space-x-4">
-                <!-- Notifications -->
-                <div class="relative">
-                    <button class="text-gray-400 hover:text-white">
-                        <i class="fas fa-bell text-xl"></i>
-                        <span class="absolute -top-2 -right-2 bg-red-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">3</span>
-                    </button>
-                </div>
+@section('title', 'Welcome')
 
-                <!-- User Menu -->
-                <div class="relative" x-data="{ open: false }">
-                    <button @click="open = !open" class="flex items-center space-x-2 text-gray-300 hover:text-white">
-                        <i class="fas fa-user-circle text-2xl"></i>
-                        <span>{{ Auth::user()->name ?? 'Admin' }}</span>
-                        <i class="fas fa-caret-down"></i>
+@section('content')
+<div class="pt-16">
+    <div class="text-center w-full">
+        <div class="flex items-center justify-center mb-6">
+            <span class="bg-gaming-red-600 rounded-full p-3 mr-2">
+                <i class="fas fa-shield-alt text-white"></i>
+            </span>
+            <h1 class="text-5xl font-extrabold text-gray-200">Game<span class="text-gaming-red-600">X</span> Admin</h1>
+        </div>
+        <p class="text-lg mb-6 max-w-lg mx-auto text-gray-400">
+            Selamat datang, {{ Auth::user()->name }}! Kelola marketplace futuristik ini dan pantau aktivitas gamer dari seluruh galaksi.
+        </p>
+        <div class="mb-8">
+            <div class="flex items-center justify-center space-x-4">
+                <div class="relative w-full max-w-md">
+                    <input type="text" id="searchInput" placeholder="Cari pengguna, produk, atau pesanan..." class="w-full px-6 py-3 search-bar text-white placeholder-gray-500 focus:outline-none">
+                    <button onclick="searchAdmin()" class="absolute right-2 top-1/2 transform -translate-y-1/2 text-gray-300 hover:text-gaming-blue">
+                        <i class="fas fa-search"></i>
                     </button>
-                    <div x-show="open" @click.away="open = false" class="absolute right-0 mt-2 w-48 bg-gray-800 rounded-lg shadow-lg py-1 border border-gray-700">
-                        <a href="#" class="block px-4 py-2 text-gray-300 hover:bg-gray-700">Profile</a>
-                        <a href="#" class="block px-4 py-2 text-gray-300 hover:bg-gray-700">Settings</a>
-                        <hr class="border-gray-700 my-1">
-                        <a href="{{ route('logout') }}"
-                           onclick="event.preventDefault(); document.getElementById('logout-form').submit();"
-                           class="block px-4 py-2 text-gray-300 hover:bg-gray-700">
-                            Logout
-                        </a>
-                        <form id="logout-form" action="{{ route('logout') }}" method="POST" class="hidden">
-                            @csrf
-                        </form>
-                    </div>
                 </div>
             </div>
         </div>
-    </nav>
-
-    <div class="flex">
-        <!-- Sidebar -->
-        <aside id="sidebar" class="bg-gray-800 w-64 min-h-screen border-r border-gray-700 transition-transform duration-300 ease-in-out lg:translate-x-0 -translate-x-full fixed lg:static z-20">
-            <div class="p-4">
-                <!-- Dashboard Overview -->
-                <div class="mb-6">
-                    <h3 class="text-gray-400 uppercase text-xs font-semibold mb-3">Dashboard</h3>
-                    <ul class="space-y-2">
-                        <li>
-                            <a href="{{ route('admin.home') ?? '#' }}" class="flex items-center space-x-3 text-gray-300 hover:text-white hover:bg-gray-700 rounded-lg px-3 py-2">
-                                <i class="fas fa-tachometer-alt"></i>
-                                <span>Overview</span>
-                            </a>
-                        </li>
-                    </ul>
-                </div>
-
-                <!-- Products Management -->
-                <div class="mb-6">
-                    <h3 class="text-gray-400 uppercase text-xs font-semibold mb-3">Produk</h3>
-                    <ul class="space-y-2">
-                        <li>
-                            <a>
-                                <i class="fas fa-gamepad"></i>
-                                <span>Kelola Produk</span>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="{{ route('produk.create') ?? '#' }}" class="flex items-center space-x-3 text-gray-300 hover:text-white hover:bg-gray-700 rounded-lg px-3 py-2">
-                                <i class="fas fa-plus"></i>
-                                <span>Tambah Game</span>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="{{ route('kategori.index') ?? '#' }}" class="flex items-center space-x-3 text-gray-300 hover:text-white hover:bg-gray-700 rounded-lg px-3 py-2">
-                                <i class="fas fa-tags"></i>
-                                <span>Kategori</span>
-                            </a>
-                        </li>
-                    </ul>
-                </div>
-
-                <!-- Orders Management -->
-                <div class="mb-6">
-                    <h3 class="text-gray-400 uppercase text-xs font-semibold mb-3">Pesanan</h3>
-                    <ul class="space-y-2">
-                        <li>
-                            <a href="{{ route('transaksi.transaksiManager') ?? '#' }}" class="flex items-center space-x-3 text-gray-300 hover:text-white hover:bg-gray-700 rounded-lg px-3 py-2">
-                                <i class="fas fa-shopping-cart"></i>
-                                <span>Konfirmasi Pesanan</span>
-                                <span class="bg-red-500 text-white text-xs rounded-full px-2 py-1 ml-auto">3</span>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="{{ route('transaksi.transaksiManager') ?? '#' }}" class="flex items-center space-x-3 text-gray-300 hover:text-white hover:bg-gray-700 rounded-lg px-3 py-2">
-                                <i class="fas fa-history"></i>
-                                <span>Riwayat Transaksi</span>
-                            </a>
-                        </li>
-                    </ul>
-                </div>
-
-                <!-- Users Management -->
-                <div class="mb-6">
-                    <h3 class="text-gray-400 uppercase text-xs font-semibold mb-3">Pengguna</h3>
-                    <ul class="space-y-2">
-                        <li>
-                            <a href="#" class="flex items-center space-x-3 text-gray-300 hover:text-white hover:bg-gray-700 rounded-lg px-3 py-2">
-                                <i class="fas fa-users"></i>
-                                <span>Kelola Pengguna</span>
-                            </a>
-                        </li>
-                    </ul>
-                </div>
-
-                <!-- Reports -->
-                <div class="mb-6">
-                    <h3 class="text-gray-400 uppercase text-xs font-semibold mb-3">Laporan</h3>
-                    <ul class="space-y-2">
-                        <li>
-                            <a href="#" class="flex items-center space-x-3 text-gray-300 hover:text-white hover:bg-gray-700 rounded-lg px-3 py-2">
-                                <i class="fas fa-chart-bar"></i>
-                                <span>Statistik Penjualan</span>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="#" class="flex items-center space-x-3 text-gray-300 hover:text-white hover:bg-gray-700 rounded-lg px-3 py-2">
-                                <i class="fas fa-file-alt"></i>
-                                <span>Laporan Bulanan</span>
-                            </a>
-                        </li>
-                    </ul>
-                </div>
-
-                <!-- Settings -->
-                <div class="mb-6">
-                    <h3 class="text-gray-400 uppercase text-xs font-semibold mb-3">Pengaturan</h3>
-                    <ul class="space-y-2">
-                        <li>
-                            <a href="#" class="flex items-center space-x-3 text-gray-300 hover:text-white hover:bg-gray-700 rounded-lg px-3 py-2">
-                                <i class="fas fa-cog"></i>
-                                <span>Konfigurasi</span>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="{{ url('/') }}" class="flex items-center space-x-3 text-gray-300 hover:text-white hover:bg-gray-700 rounded-lg px-3 py-2">
-                                <i class="fas fa-external-link-alt"></i>
-                                <span>Lihat Website</span>
-                            </a>
-                        </li>
-                    </ul>
-                </div>
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
+            <div class="glass p-6 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 hover-lift">
+                <i class="fas fa-box-open text-3xl text-gaming-blue mb-2"></i>
+                <h3 class="text-lg font-semibold text-gray-300 mb-2">Total Produk</h3>
+                <p class="text-3xl font-bold">{{ $produks->count() }}</p>
+                <p class="text-sm text-gray-500 mt-2">Jumlah produk yang dikelola</p>
             </div>
-        </aside>
-
-        <!-- Main Content -->
-        <main class="flex-1 lg:ml-0">
-            <div class="p-6">
-                @if(session('success'))
-                    <div class="bg-green-600 text-white p-4 rounded-lg mb-6 flex items-center">
-                        <i class="fas fa-check-circle mr-2"></i>
-                        {{ session('success') }}
-                    </div>
-                @endif
-
-                @if(session('error'))
-                    <div class="bg-red-600 text-white p-4 rounded-lg mb-6 flex items-center">
-                        <i class="fas fa-exclamation-circle mr-2"></i>
-                        {{ session('error') }}
-                    </div>
-                @endif
-
-                <!-- Example Tabel Produk dengan Tombol Mainkan Game -->
-                <h2 class="text-2xl font-bold mb-4">Daftar Produk</h2>
-<table class="min-w-full bg-gray-800 rounded-lg overflow-hidden shadow">
-    <thead>
-        <tr class="bg-gray-700 text-left text-gray-300 uppercase text-xs">
-            <th class="px-4 py-3">ID</th>
-            <th class="px-4 py-3">Nama Game</th>
-            <th class="px-4 py-3">Platform</th>
-            <th class="px-4 py-3">Aksi</th>
-        </tr>
-    </thead>
-    <tbody class="divide-y divide-gray-700">
-        @foreach($produks as $produk)
-        <tr>
-            <td class="px-4 py-2">{{ $produk->id }}</td>
-            <td class="px-4 py-2">{{ $produk->nama }}</td>
-            <td class="px-4 py-2">{{ $produk->platform }}</td>
-            <td class="px-4 py-2 text-center space-x-2">
-                <!-- Tombol Mainkan Game -->
-                <a href="{{ route('admin.play', $produk->id) }}"
-                   class="bg-green-600 hover:bg-green-700 text-white px-3 py-1 rounded text-sm">
-                    <i class="fas fa-play mr-1"></i> Mainkan Game
-                </a>
-                <!-- (Opsional) Tombol Edit -->
-                <a href="{{ route('produk.edit', $produk->id) }}"
-                   class="bg-yellow-600 hover:bg-yellow-700 text-white px-3 py-1 rounded text-sm">
-                    <i class="fas fa-edit mr-1"></i> Edit
-                </a>
-                <!-- (Opsional) Tombol Hapus -->
-                <form action="{{ route('produk.destroy', $produk->id) }}" method="POST" class="inline-block" onsubmit="return confirm('Yakin ingin menghapus produk ini?');">
-                    @csrf
-                    @method('DELETE')
-                    <button type="submit" class="bg-red-600 hover:bg-red-700 text-white px-3 py-1 rounded text-sm">
-                        <i class="fas fa-trash-alt mr-1"></i> Hapus
-                    </button>
-                </form>
-            </td>
-        </tr>
-        @endforeach
-    </tbody>
-</table>
-
-
-                @yield('content')
+            <div class="glass p-6 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 hover-lift">
+                <i class="fas fa-shopping-cart text-3xl text-gaming-red-600 mb-2"></i>
+                <h3 class="text-lg font-semibold text-gray-300 mb-2">Produk Aktif</h3>
+                <p class="text-3xl font-bold">{{ $produks->where('stok', '>', 0)->count() }}</p>
+                <p class="text-sm text-gray-500 mt-2">Produk dengan stok tersedia</p>
             </div>
-        </main>
+            <div class="glass p-6 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 hover-lift">
+                <i class="fas fa-dollar-sign text-3xl text-yellow-500 mb-2"></i>
+                <h3 class="text-lg font-semibold text-gray-300 mb-2">Total Nilai Produk</h3>
+                <p class="text-3xl font-bold">Rp {{ number_format($produks->sum('harga'), 0, ',', '.') }}</p>
+                <p class="text-sm text-gray-500 mt-2">Total harga semua produk</p>
+            </div>
+        </div>
+        <div class="space-x-4">
+            <a href="{{ route('logout') }}" class="logout-btn">Logout</a>
+        </div>
     </div>
 
-    <!-- Overlay for mobile sidebar -->
-    <div id="sidebarOverlay" class="fixed inset-0 bg-black bg-opacity-50 z-10 lg:hidden hidden"></div>
-
-    <!-- Alpine.js -->
-    <script src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
-
-    <!-- Sidebar Toggle Script -->
     <script>
-        const sidebarToggle = document.getElementById('sidebarToggle');
-        const sidebar = document.getElementById('sidebar');
-        const sidebarOverlay = document.getElementById('sidebarOverlay');
-
-        sidebarToggle.addEventListener('click', () => {
-            sidebar.classList.toggle('-translate-x-full');
-            sidebarOverlay.classList.toggle('hidden');
-        });
-
-        sidebarOverlay.addEventListener('click', () => {
-            sidebar.classList.add('-translate-x-full');
-            sidebarOverlay.classList.add('hidden');
-        });
+        function searchAdmin() {
+            let input = document.getElementById('searchInput').value.toLowerCase();
+            console.log("Searching for: ", input);
+            if (input) window.location.href = `{{ url('/admin/search') }}?q=${encodeURIComponent(input)}`;
+        }
     </script>
-
-    @yield('scripts')
-</body>
-</html>
+@endsection
