@@ -109,7 +109,7 @@
         @endif
 
         <div style="margin-top: 30px;">
-            <a href="{{ route('admin.home') }}" class="back-button">⬅️ Kembali ke Library</a>
+            <a href="{{ route('transaksi.library') }}" class="back-button">⬅️ Kembali ke Library</a>
         </div>
     </div>
 

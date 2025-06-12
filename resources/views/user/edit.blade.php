@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Create Product - GameX</title>
+    <title>Edit Product - GameX</title>
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
@@ -60,7 +60,7 @@
 
     <section class="pt-20 pb-10 bg-gaming-dark">
         <div class="max-w-4xl mx-auto px-6">
-            <h1 class="text-4xl font-extrabold text-white mb-8 text-center">Tambah Produk Baru</h1>
+            <h1 class="text-4xl font-extrabold text-white mb-8 text-center">Edit Produk</h1>
 
             @if ($errors->any())
                 <div class="bg-gaming-red-600 text-white p-4 rounded-lg mb-6">

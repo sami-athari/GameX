@@ -210,7 +210,7 @@ public function search(Request $request)
     $produk = Produk::findOrFail($id);
 
     // Kirim ke view
-    return view('play', compact('produk'));
+    return view('userplay', compact('produk'));
 }
 
 
