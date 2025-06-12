@@ -214,97 +214,174 @@
   <!-- Navigation -->
   @include('user.navbar')
 
-  <!-- Hero Interaktif -->
-  <section class="pt-20">
-    <div class="max-w-screen-2xl mx-auto px-6 relative">
-      <div class="relative w-full rounded-2xl overflow-hidden shadow-2xl mb-12">
-        <div class="hero-carousel">
-          @foreach($produks->take(5) as $index => $produk)
-            <div class="hero-slide" data-index="{{ $index }}">
-              <img
-                src="{{ Storage::url($produk->gambar) }}"
-                alt="{{ $produk->nama }}"
-                class="w-full h-full object-cover"
-              />
-              <div class="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent"></div>
-              <div class="absolute bottom-8 left-8 space-y-4 text-white max-w-md">
-                <h2 class="text-4xl md:text-5xl font-bold">
-                  {{ $produk->nama }} {{ $produk->discount_label ? 'Enhanced' : '' }}
-                </h2>
-                <p class="text-lg text-gray-300">
-    {{ $produk->deskripsi }}
-</p>
-                <div class="flex items-center space-x-4">
-                  @if($produk->orig_price)
-                    <span class="text-gray-400 line-through">
-                      IDR {{ number_format($produk->orig_price, 0, ',', '.') }}
-                    </span>
-                    <span class="text-lg font-bold text-gaming-blue">
-                      IDR {{ number_format($produk->harga, 0, ',', '.') }}
-                    </span>
-                    <span class="px-2 py-1 bg-gaming-blue text-white text-xs rounded">
-                      -{{ round((($produk->orig_price - $produk->harga) / $produk->orig_price) * 100) }}%
-                    </span>
-                  @else
-                    <span class="text-2xl font-bold">
-                      {{ $produk->harga == 0 ? 'FREE' : 'Rp '.number_format($produk->harga, 0, ',', '.') }}
-                    </span>
-                  @endif
-                </div>
-                <div class="flex space-x-4">
-                  <button
-                    onclick="window.location.href='{{ route('deskripsi', $produk->id) }}'"
-                    class="px-6 py-3 bg-white text-black rounded-lg hover-lift"
-                  >
-                    View More
-                  </button>
-                  <form action="{{ route('transaksi.beli') }}" method="POST">
-                    @csrf
-                    <input type="hidden" name="produk_id" value="{{ $produk->id }}">
-                    <button type="submit" class="px-4 py-3 border border-white rounded-lg hover:bg-white hover:text-black transition">
-                      Add to Cart
-                    </button>
-                  </form>
-                </div>
+ <!-- Hero Interaktif -->
+<section class="pt-20">
+  <div class="max-w-screen-2xl mx-auto px-6 flex flex-col lg:flex-row gap-8">
+    <!-- Left: Hero Carousel -->
+    <div class="relative lg:w-3/4 rounded-2xl overflow-hidden shadow-2xl">
+      <div class="hero-carousel h-[70vh] relative" id="heroCarousel">
+        @foreach($produks->take(5) as $index => $produk)
+          <div class="hero-slide absolute inset-0 transition-opacity duration-700 ease-in-out {{ $index === 0 ? 'opacity-100 z-10' : 'opacity-0 z-0' }}" data-index="{{ $index }}">
+            <img src="{{ Storage::url($produk->gambar) }}" alt="{{ $produk->nama }}" class="w-full h-full object-cover" loading="lazy" />
+            <div class="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent"></div>
+            <div class="absolute bottom-8 left-8 max-w-md space-y-4 text-white">
+              <h2 class="text-4xl md:text-5xl font-bold">
+                {{ $produk->nama }} {{ $produk->discount_label ? 'Enhanced' : '' }}
+              </h2>
+              <p class="text-lg text-gray-300">{{ Str::limit($produk->deskripsi, 100) }}</p>
+              <div class="flex items-center space-x-4">
+                @if($produk->orig_price)
+                  <span class="line-through text-gray-400">
+                    IDR {{ number_format($produk->orig_price, 0, ',', '.') }}
+                  </span>
+                  <span class="text-lg font-bold text-gaming-blue">
+                    IDR {{ number_format($produk->harga, 0, ',', '.') }}
+                  </span>
+                  <span class="px-2 py-1 bg-gaming-blue text-xs rounded text-white">
+                    -{{ round((($produk->orig_price - $produk->harga)/$produk->orig_price)*100) }}%
+                  </span>
+                @else
+                  <span class="text-2xl font-bold">
+                    {{ $produk->harga == 0 ? 'FREE' : 'Rp '.number_format($produk->harga, 0, ',', '.') }}
+                  </span>
+                @endif
               </div>
-              <div class="side-panel">
-                @foreach($produks->skip(1)->take(5) as $sideProduct)
-                  <div class="side-panel-item">
-                    <img src="{{ Storage::url($sideProduct->gambar) }}" alt="{{ $sideProduct->nama }}" />
-                    <span>{{ $sideProduct->nama }}</span>
-                  </div>
-                @endforeach
+              <div class="flex space-x-4">
+                <button onclick="window.location.href='{{ route('deskripsi', $produk->id) }}'"
+                        class="px-6 py-3 bg-white text-gaming-red-600 rounded-lg hover:bg-gray-100 hover-lift transition-colors">
+                  View More
+                </button>
+                <form action="{{ route('transaksi.beli') }}" method="POST" class="">
+                  @csrf
+                  <input type="hidden" name="produk_id" value="{{ $produk->id }}">
+                  <button type="submit"
+                          class="px-4 py-3 border border-white rounded-lg hover:bg-white hover:text-black transition">
+                    Add to Cart
+                  </button>
+                </form>
               </div>
             </div>
-          @endforeach
-          <button class="hero-nav-button left" id="hero-prev"><i class="fas fa-chevron-left"></i></button>
-          <button class="hero-nav-button right" id="hero-next"><i class="fas fa-chevron-right"></i></button>
-          <div class="hero-dots" id="hero-dots"></div>
-        </div>
-      </div>
-
-      <!-- Right: Sidebar Thumbnails (optional, bisa dihapus jika tidak diperlukan) -->
-      <div class="space-y-4 flex flex-col items-center mt-8 lg:mt-0 lg:ml-8 hidden">
-        @foreach($produks->take(4) as $idx => $p)
-          <div
-            class="w-24 h-32 rounded-lg overflow-hidden cursor-pointer border-2 border-transparent hover:border-red-600 transition"
-            data-index="{{ $idx }}"
-            data-title="{{ $p->nama }}"
-            data-desc="{{ $p->description }}"
-            data-img="{{ Storage::url($p->gambar) }}"
-            data-sale-price="{{ $p->harga }}"
-            data-discount="{{ $p->discount_label }}"
-          >
-            <img
-              src="{{ Storage::url($p->gambar) }}"
-              alt="{{ $p->nama }}"
-              class="w-full h-full object-cover"
-            />
           </div>
         @endforeach
+
+        <!-- Prev/Next Buttons -->
+        <button id="hero-prev" class="hero-nav-button left-2"><i class="fas fa-chevron-left"></i></button>
+        <button id="hero-next" class="hero-nav-button right-2"><i class="fas fa-chevron-right"></i></button>
+        <!-- Dots -->
+        <div id="hero-dots" class="hero-dots absolute bottom-4 left-1/2 transform -translate-x-1/2 flex space-x-2"></div>
       </div>
     </div>
-  </section>
+
+    <!-- Right: Side Panel Thumbnails -->
+    <div class="lg:w-1/4 space-y-4 overflow-y-auto h-[70vh] bg-gaming-card rounded-xl p-4">
+      @foreach($produks->skip(1)->take(5) as $index => $sideProduct)
+        <div class="side-panel-item flex items-center cursor-pointer group"
+             onclick="goToSlide({{ $index + 1 }})"
+             data-index="{{ $index + 1 }}">
+          <img src="{{ Storage::url($sideProduct->gambar) }}"
+               alt="{{ $sideProduct->nama }}"
+               class="w-16 h-24 object-cover rounded-md group-hover:scale-105 transition-transform"
+               loading="lazy" />
+          <span class="ml-3 text-sm text-gray-300 group-hover:text-white transition-colors">
+            {{ $sideProduct->nama }}
+          </span>
+        </div>
+      @endforeach
+    </div>
+  </div>
+</section>
+
+<!-- JavaScript untuk Carousel -->
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const slides = document.querySelectorAll('.hero-slide');
+    const prevButton = document.getElementById('hero-prev');
+    const nextButton = document.getElementById('hero-next');
+    const dotsContainer = document.getElementById('hero-dots');
+    let currentSlide = 0;
+    const slideInterval = 5000; // 5 detik
+    let autoSlide;
+
+    // Inisialisasi dots
+    slides.forEach((_, index) => {
+      const dot = document.createElement('span');
+      dot.classList.add('w-3', 'h-3', 'rounded-full', 'bg-gray-400', 'cursor-pointer', 'hover:bg-white');
+      dot.dataset.index = index;
+      dot.addEventListener('click', () => goToSlide(index));
+      dotsContainer.appendChild(dot);
+    });
+    updateDots();
+
+    // Fungsi untuk perpindahan slide
+    function goToSlide(index) {
+      slides.forEach((slide, i) => {
+        slide.classList.toggle('opacity-100', i === index);
+        slide.classList.toggle('opacity-0', i !== index);
+        slide.classList.toggle('z-10', i === index);
+        slide.classList.toggle('z-0', i !== index);
+      });
+      currentSlide = index;
+      updateDots();
+    }
+
+    // Fungsi untuk update dots
+    function updateDots() {
+      document.querySelectorAll('#hero-dots span').forEach((dot, index) => {
+        dot.classList.toggle('bg-white', index === currentSlide);
+      });
+    }
+
+    // Event untuk tombol prev
+    prevButton.addEventListener('click', () => {
+      currentSlide = (currentSlide - 1 + slides.length) % slides.length;
+      goToSlide(currentSlide);
+    });
+
+    // Event untuk tombol next
+    nextButton.addEventListener('click', () => {
+      currentSlide = (currentSlide + 1) % slides.length;
+      goToSlide(currentSlide);
+    });
+
+    // Auto slide
+    function startAutoSlide() {
+      autoSlide = setInterval(() => {
+        currentSlide = (currentSlide + 1) % slides.length;
+        goToSlide(currentSlide);
+      }, slideInterval);
+    }
+
+    function stopAutoSlide() {
+      clearInterval(autoSlide);
+    }
+
+    // Mulai auto slide
+    startAutoSlide();
+
+    // Hover untuk pause
+    const carousel = document.querySelector('.hero-carousel');
+    carousel.addEventListener('mouseenter', stopAutoSlide);
+    carousel.addEventListener('mouseleave', startAutoSlide);
+
+    // Sinkronisasi dengan thumbnail
+    document.querySelectorAll('.side-panel-item').forEach(item => {
+      item.addEventListener('click', (e) => {
+        const index = parseInt(e.currentTarget.dataset.index) - 1; // Sesuaikan index (skip(1) membuat offset)
+        goToSlide(index);
+      });
+    });
+  });
+</script>
+
+<style>
+  .hero-nav-button {
+    @apply absolute top-1/2 transform -translate-y-1/2 bg-black/50 text-white p-2 rounded-full hover:bg-black/70 transition;
+  }
+  .hero-nav-button.left { left: 10px; }
+  .hero-nav-button.right { right: 10px; }
+  .hero-dots span { transition: background-color 0.3s; }
+  .hero-slide { display: block; } /* Pastikan slide ditampilkan sebagai block */
+</style>
 
   <!-- Games Carousel -->
 <section id="games-section" class="py-12">

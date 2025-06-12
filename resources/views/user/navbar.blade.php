@@ -52,63 +52,65 @@
   }
 </style>
 <div class="pt-16">
-<nav class="font-sans fixed top-0 left-0 right-0 z-50 glass py-4">
-  <div class="max-w-screen-2xl mx-auto px-6">
-    <div class="flex justify-between items-center">
-      <a href="{{ Auth::check() ? route('home') : url('/') }}" class="text-2xl font-extrabold">
-        Game<span class="text-gaming-red-600">X</span>
-      </a>
-      <div class="hidden md:flex items-center space-x-8">
-        <a href="{{ Auth::check() ? route('home') : url('/') }}" class="text-gray-300 hover:text-gaming-red-600">Home</a>
-        <a href="{{ route('transaksi.cart') }}" class="text-gray-300 hover:text-gaming-red-600">Cart</a>
-        <a href="{{ route('transaksi.library') }}" class="text-gray-300 hover:text-gaming-red-600">Library</a>
-        <a href="{{ route('transaksi.transaksi') }}" class="text-gray-300 hover:text-gaming-red-600">Transaksi</a>
-        <form action="{{ route('transaksi.search') }}" method="GET" class="relative ml-6">
-          <input type="text" name="q" placeholder="Search games..."
-                 class="py-1.5 px-4 rounded-full bg-gaming-dark text-sm focus:outline-none focus:ring focus:ring-gaming-red-600 hover:ring hover:ring-gaming-red-600 w-40 md:w-56 font-sans"/>
-          <button type="submit"
-                  class="absolute top-1/2 right-3 -translate-y-1/2 text-gray-400 hover:text-white">
-            <i class="fas fa-search"></i>
-          </button>
-        </form>
-      </div>
-      <div class="flex items-center space-x-3">
-        @guest
-          <a href="{{ route('login') }}" class="px-4 py-2 btn-gaming rounded-lg hover-lift font-sans">Login</a>
-          <a href="{{ route('register') }}" class="px-4 py-2 btn-gaming-red rounded-lg hover-lift font-sans">Register</a>
-        @else
-          <div class="relative group">
-            <button class="flex items-center space-x-2 font-sans">
-              <i class="fas fa-user"></i>
-              <span>{{ Auth::user()->name }}</span>
-              <i class="fas fa-chevron-down text-sm"></i>
+  <nav class="font-sans fixed top-0 left-0 right-0 z-50 glass py-4">
+    <div class="max-w-screen-2xl mx-auto px-6">
+      <div class="flex justify-between items-center">
+        <a href="{{ Auth::check() ? route('home') : url('/') }}" class="text-2xl font-extrabold">
+          Game<span class="text-gaming-red-600">X</span>
+        </a>
+        <div class="hidden md:flex items-center space-x-8">
+          <a href="{{ Auth::check() ? route('home') : url('/') }}" class="text-gray-300 hover:text-gaming-red-600">Home</a>
+          <a href="{{ route('transaksi.cart') }}" class="text-gray-300 hover:text-gaming-red-600">Cart</a>
+          <a href="{{ route('transaksi.library') }}" class="text-gray-300 hover:text-gaming-red-600">Library</a>
+          <a href="{{ route('transaksi.transaksi') }}" class="text-gray-300 hover:text-gaming-red-600">Transaksi</a>
+          <form action="{{ route('transaksi.search') }}" method="GET" class="relative ml-6">
+            <input type="text" name="q" placeholder="Search games..."
+                   class="py-1.5 px-4 rounded-full bg-gaming-dark text-sm focus:outline-none focus:ring focus:ring-gaming-red-600 hover:ring hover:ring-gaming-red-600 w-40 md:w-56 font-sans"/>
+            <button type="submit"
+                    class="absolute top-1/2 right-3 -translate-y-1/2 text-gray-400 hover:text-white">
+              <i class="fas fa-search"></i>
             </button>
-            <div class="absolute right-0 mt-2 w-48 bg-gaming-card rounded-lg shadow-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 font-sans">
-              <a href="#" class="block px-4 py-2 hover:bg-gaming-hover">Profile</a>
-              <div class="border-t border-gray-600 my-1"></div>
-              <a href="{{ route('logout') }}"
-                 onclick="event.preventDefault(); document.getElementById('logout-form').submit();"
-                 class="block px-4 py-2 hover:bg-gaming-hover">Logout</a>
-              <form id="logout-form" action="{{ route('logout') }}" method="POST" class="hidden">@csrf</form>
+          </form>
+        </div>
+        <div class="flex items-center space-x-3">
+          @guest
+            <a href="{{ route('login') }}" class="px-4 py-2 btn-gaming rounded-lg hover-lift font-sans">Login</a>
+            <a href="{{ route('register') }}" class="px-4 py-2 btn-gaming-red rounded-lg hover-lift font-sans">Register</a>
+          @else
+            <div class="relative group">
+              <button class="flex items-center space-x-2 font-sans">
+                <i class="fas fa-user"></i>
+                <span>{{ Auth::user()->name }}</span>
+                <i class="fas fa-chevron-down text-sm"></i>
+              </button>
+              <div class="absolute right-0 mt-2 w-48 bg-gaming-card rounded-lg shadow-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 font-sans">
+                <a href="{{ route('user.produk.index') }}" class="block px-4 py-2 hover:bg-gaming-hover">My Products</a>
+                <a href="#" class="block px-4 py-2 hover:bg-gaming-hover">Profile</a>
+                <div class="border-t border-gray-600 my-1"></div>
+                <a href="{{ route('logout') }}"
+                   onclick="event.preventDefault(); document.getElementById('logout-form').submit();"
+                   class="block px-4 py-2 hover:bg-gaming-hover">Logout</a>
+                <form id="logout-form" action="{{ route('logout') }}" method="POST" class="hidden">@csrf</form>
+              </div>
             </div>
-          </div>
-        @endguest
+          @endguest
+        </div>
+        <div class="md:hidden">
+          <button id="mobile-menu-button" class="font-sans"><i class="fas fa-bars text-xl"></i></button>
+        </div>
       </div>
-      <div class="md:hidden">
-        <button id="mobile-menu-button" class="font-sans"><i class="fas fa-bars text-xl"></i></button>
+      <div id="mobile-menu" class="md:hidden hidden pb-4 font-sans">
+        <a href="{{ Auth::check() ? route('home') : url('/') }}" class="block py-2 hover:text-gaming-red-600">Home</a>
+        <a href="{{ route('transaksi.cart') }}" class="block py-2 hover:text-gaming-red-600">Cart</a>
+        <a href="{{ route('transaksi.library') }}" class="block py-2 hover:text-gaming-red-600">Library</a>
+        <a href="{{ route('transaksi.transaksi') }}" class="block py-2 hover:text-gaming-red-600">Transaksi</a>
       </div>
     </div>
-    <div id="mobile-menu" class="md:hidden hidden pb-4 font-sans">
-      <a href="{{ Auth::check() ? route('home') : url('/') }}" class="block py-2 hover:text-gaming-red-600">Home</a>
-      <a href="{{ route('transaksi.cart') }}" class="block py-2 hover:text-gaming-red-600">Cart</a>
-      <a href="{{ route('transaksi.library') }}" class="block py-2 hover:text-gaming-red-600">Library</a>
-      <a href="{{ route('transaksi.transaksi') }}" class="block py-2 hover:text-gaming-red-600">Transaksi</a>
-    </div>
-  </div>
-</nav>
+  </nav>
 
-<script>
-  document.getElementById('mobile-menu-button').addEventListener('click', () => {
-    document.getElementById('mobile-menu').classList.toggle('hidden');
-  });
-</script>
+  <script>
+    document.getElementById('mobile-menu-button').addEventListener('click', () => {
+      document.getElementById('mobile-menu').classList.toggle('hidden');
+    });
+  </script>
+</div>

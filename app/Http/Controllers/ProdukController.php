@@ -18,7 +18,7 @@ class ProdukController extends Controller
         return view('adminHome', ['produks' => $produks]);
     }
 
-    
+
 
     // Menampilkan form tambah produk (admin)
     public function create()
@@ -43,8 +43,8 @@ public function deskripsi($id)
             'stok' => 'required|integer',
             'kategori_id' => 'required|exists:kategoris,id', // Menggunakan kategori_id yang benar
             'platform' => 'required',
-            'zip_file' => 'nullable|file|mimes:zip|max:10240',
-            'gambar' => 'nullable|image|max:2048',  // Validasi gambar
+            'zip_file' => 'nullable|file|mimes:zip|max:500000',
+            'gambar' => 'nullable|image|max:20000',  // Validasi gambar
         ]);
 
         try {

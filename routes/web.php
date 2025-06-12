@@ -11,7 +11,7 @@ use App\Http\Controllers\KategoriController;
 use App\Http\Controllers\PembelianController;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\BerandaControllers;
-
+use App\Http\Controllers\UserProdukController;
 // Landing page
 Route::get('/', function () {
     $produks = Produk::latest()->get(); // Ambil produk terbaru
@@ -54,6 +54,15 @@ Route::get('/produk/{id}/edit', [ProdukController::class, 'edit'])->name('produk
 Route::put('/produk/{id}', [ProdukController::class, 'update'])->name('produk.update');
 Route::delete('/produk/{id}', [ProdukController::class, 'destroy'])->name('produk.destroy');
 
+// User routes
+Route::middleware(['auth', 'user-access:user'])->group(function () {
+    Route::get('/produk-user', [UserProdukController::class, 'index'])->name('user.produk.index');
+    Route::get('/produk-user/create', [UserProdukController::class, 'create'])->name('user.produk.create');
+    Route::post('/produk-user', [UserProdukController::class, 'store'])->name('user.produk.store');
+    Route::get('/produk-user/{id}/edit', [UserProdukController::class, 'edit'])->name('user.produk.edit');
+    Route::put('/produk-user/{id}', [UserProdukController::class, 'update'])->name('user.produk.update');
+    Route::delete('/produk-user/{id}', [UserProdukController::class, 'destroy'])->name('user.produk.destroy');
+});
 // Kategori
 Route::resource('kategori', KategoriController::class);
 
@@ -64,7 +73,7 @@ Route::get('/deskripsi/{id}', [ProdukController::class, 'deskripsi'])->name('des
 Route::post('/transaksi/beli', [PembelianController::class, 'beli'])->name('transaksi.beli');
 Route::post('/bayar', [PembelianController::class, 'bayar'])->name('transaksi.bayar'); // ✅ cukup 1x
 Route::get('/cart', [PembelianController::class, 'transaksiCart'])->name('transaksi.cart');
-Route::get('/transaksi/{id}/clearcart', [PembelianController::class, 'clearcart'])->name('transaksi.clearcart');
+Route::post('/transaksi/{id}/clearcart', [PembelianController::class, 'clearcart'])->name('transaksi.clearcart');
 Route::get('/transaksi/cart', [PembelianController::class, 'transaksiCart'])->name('transaksi.cart');
 Route::get('/transaksi2', [PembelianController::class, 'transaksiIndex'])->name('transaksi.transaksi');
 Route::delete('/transaksi/{id}', [PembelianController::class, 'hapus'])->name('transaksi.hapus');

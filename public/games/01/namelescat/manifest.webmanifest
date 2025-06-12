@@ -1,0 +1,12 @@
+{
+  "name": "Nameless Cat",
+  "short_name": "Nameless Cat",
+  "id": "com.example.gamename",
+  "description": "",
+  "orientation": "landscape",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "background_color": "black",
+  "categories": ["games", "entertainment"],
+  "icons": []
+}
